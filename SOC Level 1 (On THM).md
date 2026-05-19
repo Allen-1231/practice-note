@@ -2129,7 +2129,23 @@ A：10.0.0.51
 
 #### External vs Internal Scanning
 
+- External Scanning
+來自組織網路外部，並掃描網絡內部的機器 (主要針對網絡邊緣的公共資產) 的掃描活動。這種攻擊的來源 IP 是外部 IP 地址，目標 IP 為屬於被攻擊組織的 IP 地址。
 
+    這種掃描指出攻擊仍在偵查階段 (MITRE ATT&CK lifecycle 中的 Reconnaissance 階段)，攻擊者尚未在內部網路內有立足點 (foothold)，他們還在找有無什麼機會取得對內部網路的存取。
+
+    ![alt text](image-1.png)
+
+    這種類型的掃描是攻擊的初期階段，攻擊者尚未在網絡中建立任何可利用的入口，因此屬於低危險等級的掃描活動，分析師可以阻擋組織網路邊界防火牆上的惡意 IP 地址，然而攻擊者也有可能隱藏其 IP 地址再次發起攻擊。
+
+- Internal Scanning
+內部網路到內部網路的掃描活動，來源 IP 與目標 IP 都是組織內網中的私有 IP 地址。
+
+    這種掃描指出攻擊已經進行到發現階段 (MITRE ATT&CK lifecycle 中的 Discovery 階段，在有些框架稱為 internal reconnaissance)，攻擊者在網路中已有立足點，並且正準備進行橫向移動。
+    
+    ![alt text](image2.png)
+
+    這種掃描結果表示攻擊者已經進入了網路，因此屬於高危險等級的警報。確認這不是任何授權活動後，分析師應升級警報，並啟動 incident response 流程。
 
 ---
 
