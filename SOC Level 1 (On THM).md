@@ -2147,6 +2147,23 @@ A：10.0.0.51
 
     這種掃描結果表示攻擊者已經進入了網路，因此屬於高危險等級的警報。確認這不是任何授權活動後，分析師應升級警報，並啟動 incident response 流程。
 
+練習：在 THM 房間的虛擬機中的 `Downloads/logs` 目錄有一些從 SIEM 導出的 `CSV` 檔，回答以下問題。
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+1. Which file contains logs that showcase internal scanning activity?
+![alt text](image-4.png)
+A：`log-session-2.csv`
+    > 因為 `src_ip` 與 `dst_ip` 一樣共享 `192.168.230...`。
+    
+    > 第一行的欄位名稱是 port 而不是 ip 的原因是在各檔案的 `@timestamp` 欄位中也有逗號，使用 `cut` 指令並指定用逗號分隔會使得欄位編號需要多一才能選取到要分析的兩個 ip 欄位。
+
+2. How many log entries are present for the internal IP performing internal scanning activity?
+![alt text](image-6.png)
+A：2276
+
+3. What is the external IP address that is performing external scanning activity?
+
 ---
 
 #### Horizontal vs Vertical Scanning
