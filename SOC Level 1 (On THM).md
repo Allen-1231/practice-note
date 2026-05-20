@@ -2163,6 +2163,10 @@ A：`log-session-2.csv`
 A：2276
 
 3. What is the external IP address that is performing external scanning activity?
+![截圖](image-5.png)
+A：`203.0.113.25`
+
+> 第三欄的欄位名稱為來源 port 而不是來源 ip，是因為在 `@timestamp` 欄位也有逗號，若要篩選正確的來源 ip 資訊，以逗號分隔來說在第三欄位，因此忽略欄位名稱針對要分析的內容篩選而已。
 
 ---
 
