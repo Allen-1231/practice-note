@@ -2234,3 +2234,11 @@ A：203.0.113.25
     A：192.168.230.145
 
 3. On one of the IP addresses, only a few ports are scanned which host common services. Which are the ports that are scanned on this IP address? Format: port1, port2, port3 in ascending order.
+
+    ![alt text](image.png)
+    A：80 (HTTP), 445 (SMB), 3389 (RDP)
+
+---
+
+#### The mechanics of scanning 掃描機制
+
