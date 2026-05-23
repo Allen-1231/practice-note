@@ -2242,3 +2242,45 @@ A：203.0.113.25
 
 #### The mechanics of scanning 掃描機制
 
+##### Ping Sweep
+
+一種最基本的網路掃描技術之一，ping 掃描通常用於識別存在 (present) 於網路中且在線 (online) 的主機。
+
+此掃描會傳送一個 ICMP (Internet Control Message Protocol) 封包到目標主機，如果該主機在線，它會以它自己的 ICMP 封包做回應。
+
+##### TCP SYN Scans
+
+TCP 連線由三向交握 (three-way handshake) 建立，跟著 SYN，SYN-ACK，ACK 的步驟建立連線。
+
+網路掃描有時可以利用 TCP 握手來識別在線的主機與它們分別有開的 port。掃描器傳送一個 SYN 請求到目標主機，如果有接收到 SYN-ACK 回應，代表該主機在線且該請求傳送到的 port 同時也是打開的。
+
+這種掃描方式通常與正常的網路流量混在一起，因此更難被檢測到。
+
+##### UDP Scan
+
+也是一種識別在線的主機與打開的 port 的方法，透過傳送一個通常是空的 UDP 封包。如果 port 是關閉的，主機會傳回一個 "ICMP port unreachable" 的回應，意味著 port 關閉，但主機是在線的。
+
+掃描器有時可能需要等待一段時間才能收到任何回覆，如果未收到任何回覆，掃描器會將 port 標記為開放狀態，但這並不能明確證明 port 是開放的。極少數情況下，掃描器可能會收到一個 UDP 封包回應，這表明 port 是開放的。
+
+如此可以推斷出 UDP 掃描是不穩定且緩慢的，因為它依賴於等待，直到超時後再收到任何回覆。
+
+> 多數組織通常會進行內部掃描，以檢查潛在的安全漏洞，監控未經授權的資產，並識別減少攻擊面 (attack surface) 的機會，因此理想情況下，這些掃描結果應被排除在 SOC 團隊的任何檢測用例之外，以減少誤報。
+
+##### 練習
+
+THM 提供憑證，使用 Kibana 透過防火牆日誌識別不同的掃描類型。
+![alt text](image-1.png)
+
+用這個 Kibana 的 dashboard 來回答問題：
+1. Which source IP performs a ping sweep attack across a whole subnet?
+新增 source.ip 與 network.protocol 欄位並篩選 ICMP 協定：
+![alt text](image-5.png)
+![alt text](image-6.png)
+
+    或是用 KQL 語句 `network.protocol: icmp` 來篩選：
+    ![alt text](image-4.png)
+    A：`192.168.230.127`
+
+2. The zeek.conn.conn_state value shows the connection state. Using the information provided by this value, identify the type of scan being performed by 203.0.113.25 against 192.168.230.145
+
+3. Is there any UDP scanning attempt in the logs? Y/N
