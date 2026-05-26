@@ -2309,3 +2309,24 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 ---
 
 ### Windows Logging for SOC
+
+當對電腦無論是啟動、建立檔案、登入電腦等事件都會經作業系統處理，並被紀錄成日誌。每行紀錄由事件發生時間、事件行為詳情資訊、操作事件的使用者等組成。
+
+日誌紀錄可以幫助到：
+- Incident Response: 日誌會顯示攻擊何時發生與如何發生。
+- Threat Hunting: 日誌可以幫助尋找惡意活動的跡象。
+- Alerting and Triage: 日誌是任何警報或檢測規則的基礎。
+
+在 Windows 中，日誌儲存在 `C:\Windows\System32\winevt\Logs` 資料夾中，並且以二進位格式儲存。
+
+使用 Event Viewer，在 Windows 按 `Win + R` 後輸入 `eventvwr`，來查看所有已解析、分組並準備好進行分析的系統日誌。
+![alt text](image-11.png)
+1. Log Sources: 所有 EVTX 檔案 (Windows 的 XML 事件日誌檔案，它是儲存由 Windows 事件日誌系統生成的事件日誌的文件格式)。
+
+2. Log List: 一行代表一個事件。關鍵字：對於事件指出操作是否成功。日期與時間：事件發生的時間 (系統的時間)。事件識別碼：獨特的編號用於識別特定活動 (如登入失敗為 4625)。
+
+3. Log Details: 日誌真正的內容，明文 plaintext 或是 XML 格式 (詳細資料區塊)。
+
+4. Filters Menu: 使用 **篩選目前的紀錄** 與 **尋找** 來過濾日誌。
+
+![alt text](image-10.png)
