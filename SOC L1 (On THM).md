@@ -2231,7 +2231,7 @@ A：203.0.113.25
 
 3. On one of the IP addresses, only a few ports are scanned which host common services. Which are the ports that are scanned on this IP address? Format: port1, port2, port3 in ascending order.
 
-    ![alt text](image.png)
+    ![image](https://hackmd.io/_uploads/B1CUCP61fe.png)
     A：80 (HTTP), 445 (SMB), 3389 (RDP)
 
 ---
@@ -2265,23 +2265,23 @@ TCP 連線由三向交握 (three-way handshake) 建立，跟著 SYN，SYN-ACK，
 ##### 練習
 
 THM 提供憑證，使用 Kibana 透過防火牆日誌識別不同的掃描類型。
-![alt text](image-1.png)
+![image](https://hackmd.io/_uploads/SJVd6h0JMl.png)
 
 用這個 Kibana 的 dashboard 來回答問題：
 1. Which source IP performs a ping sweep attack across a whole subnet?
 
     新增 source.ip 與 network.protocol 欄位並篩選 ICMP 協定：
-![alt text](image-5.png)
-![alt text](image-6.png)
+    ![image](https://hackmd.io/_uploads/HJxQzWkgfg.png)
+    ![image](https://hackmd.io/_uploads/ByBrM-klGe.png)
 
     或是用 KQL 語句 `network.protocol: icmp` 來篩選：
-    ![alt text](image-4.png)
+    ![image](https://hackmd.io/_uploads/rJE7W-Jlfg.png)
     A：`192.168.230.127`
 
 2. The zeek.conn.conn_state value shows the connection state. Using the information provided by this value, identify the type of scan being performed by 203.0.113.25 against 192.168.230.145
 
     使用 KQL 語句 `source.ip: 203.0.113.25 and destination.ip: 192.168.230.145` 篩選：
-![alt text](image-8.png)
+![image](https://hackmd.io/_uploads/BJSK7keeGg.png)
 S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 大量的 S0 出現在多個目標 port：表示發生了 SYN 掃描 (半開放掃描) 攻擊。
 
@@ -2291,7 +2291,7 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 
 3. Is there any UDP scanning attempt in the logs? Y/N
 
-    ![alt text](image-9.png)
+    ![image](https://hackmd.io/_uploads/rJ14IklgGe.png)
 
     看到 UDP 流量並不等同於看到 UDP 掃描。
     代表有 UDP 掃描的跡象：
@@ -2316,7 +2316,7 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 在 Windows 中，日誌儲存在 `C:\Windows\System32\winevt\Logs` 資料夾中，並且以二進位格式儲存。
 
 使用 Event Viewer，在 Windows 按 `Win + R` 後輸入 `eventvwr`，來查看所有已解析、分組並準備好進行分析的系統日誌。
-![alt text](image-11.png)
+![image](https://hackmd.io/_uploads/B19KYKfefg.png)
 1. Log Sources: 所有 EVTX 檔案 (Windows 的 XML 事件日誌檔案，它是儲存由 Windows 事件日誌系統生成的事件日誌的文件格式)。
 
 2. Log List: 一行代表一個事件。關鍵字：對於事件指出操作是否成功。日期與時間：事件發生的時間 (系統的時間)。事件識別碼：獨特的編號用於識別特定活動 (如登入失敗為 4625)。
@@ -2325,7 +2325,7 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 
 4. Filters Menu: 使用 **篩選目前的紀錄** 與 **尋找** 來過濾日誌。
 
-![alt text](image-10.png)
+![image](https://hackmd.io/_uploads/SJgEtFMlzl.png)
 
 ---
 
@@ -2339,7 +2339,7 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 | 4625 (登入失敗) | 偵測暴力破解 (使用多個常見密碼嘗試登入同一帳號)、密碼噴灑 (使用常見的同一密碼嘗試登入多個帳號)、漏洞掃描。                                 | 紀錄在被嘗試取得存取的那台受攻擊的主機上。 | 不一致，日誌中有許多會誤導我們對事件的理解的盲點。 |
 
 4624 的結構：
-![alt text](image-12.png)
+![image](https://hackmd.io/_uploads/S1jUgy4eGg.png)
 重點關注項目：
 - Subject: 觸發登入事件的本地系統或處理程序，這個區塊通常代表系統本身，調查時該忽略它，真正的攻擊者在 New Logon。
 
@@ -2401,26 +2401,31 @@ S0：發送者發送了 SYN 訊息，但沒有收到任何回應。
 1. 打開在 VM 桌面上的 `Practice-Security.evtx` 檔案，哪個 IP 嘗試對 THM-PC 進行暴力破解？
 
     篩選目前日誌 --> Event ID 輸入 4625：
-    ![alt text](image-14.png)
-
+    ![image](https://hackmd.io/_uploads/SJW61bVlze.png)
+    
     點擊其中一個事件，查看詳細資訊，尋找 LogonType 為 3 或 10 的：
-    ![alt text](image-13.png)
+    ![image](https://hackmd.io/_uploads/rk0ctQSxMl.png)
 
-    每一筆皆是 LogonType 為 3 的登入失敗事件。而後查找 IP 地址：
-    ![alt text](image-15.png)
-    
-    A：`10.10.53.248`
+      每一筆皆是 LogonType 為 3 的登入失敗事件。而後查找 IP 地址：
+      ![image](https://hackmd.io/_uploads/S13Ct7HeGe.png)
 
+      A：`10.10.53.248`
+      
 2. 此攻擊導致哪個使用者帳號被入侵？
-
+    
     篩選 4624 登入成功的事件，尋找其中 IP 地址符合攻擊者的 IP 的事件：
-    ![alt text](image-16.png)
+    ![image](https://hackmd.io/_uploads/H1xO9Qrxfg.png)
     
-    從 TargetUserName 欄位找到攻擊者成功登入的主機的使用者帳號：
-    ![alt text](image-17.png)
-    
-    A：`Administrator`
+    從 New Logon 區塊中的 Account Name 欄位找到攻擊者成功登入的主機的使用者帳號名稱：
+    ![image](https://hackmd.io/_uploads/BJ8a5mrxGe.png)
 
+    A：`Administrator`
+    
 3. 惡意 RDP 登入的 Logon ID 是什麼？
+    
+    篩選目前日誌 –> Event ID 輸入 4624 --> 找尋 Logon Type 為 10 的事件：
+    ![image](https://hackmd.io/_uploads/BJ8ZoXHeMg.png)
+    
+    A：`0x183C36D`
 
 #### Security Log: User Management
