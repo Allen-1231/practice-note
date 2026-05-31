@@ -2473,7 +2473,25 @@ User Management Events 使用者管理事件的結構：
     A：`svc_sysrestore`
 
 2. Backdoor user 加進了哪兩個特權群組？
-
     
+    篩選 event ID 為 4732 的事件，一一查看群組名稱：
+    ![image](https://hackmd.io/_uploads/rJ-cvzFeMg.png)
 
-3. Logon ID 是否與前一個任務 (Security Log: Authentication) 看到的一樣？
+    ![image](https://hackmd.io/_uploads/B1g3DMKgMl.png)
+
+    A：`Backup Operators`、`Remote Desktop Users`
+    
+3. Logon ID 是否與前一個任務 (Security Log: Authentication) 看到的一樣？(Yea/Nay)
+    
+    ![image](https://hackmd.io/_uploads/BJB0OMYgzg.png)
+    
+    ![image](https://hackmd.io/_uploads/S17gtzYgGx.png)
+    
+    與前一任務的 Logon ID `0x183C36D` 一樣。
+    
+    A：`Yea`
+
+---
+
+#### Sysmon: Process Monitoring
+
