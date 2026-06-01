@@ -2495,3 +2495,54 @@ User Management Events 使用者管理事件的結構：
 
 #### Sysmon: Process Monitoring
 
+更詳細的日誌。即使知道是誰被攻破，通常也不知道攻擊具體是如何發生的，這時 process monitoring 就能幫助到這一點，而在 Windows 啟用它有兩種方法：
+
+| Event ID | 說明                                                     | 目的                                                        | 限制                                                      |
+|:--------:|:-------------------------------------------------------- |:----------------------------------------------------------- |:--------------------------------------------------------- |
+|   4688   | Security Log: Process Creation，Windows 的內建安全日誌。 | 每當電腦有新行程啟動時就會被紀錄下來，包括命令列與父行程。  | 預設下是停用的，需要透過 Windows 的群組原則去手動啟用它。 |
+|    1     | Sysmon: Process Creation，微軟的官方外部工具。           | 取代事件碼 4688，提供更進階的欄位如行程的雜湊值與數位簽章。 | Sysmon 是一個外部工具，預設下是沒有安裝的。               |
+
+Sysmon 是 Microsoft Sysinternals 套件的免費工具，除了預設的系統日誌之外，它已成為進階監控的業界標準。相比於基礎、較雜亂的事件碼 4688，不如花時間安裝 Sysmon，更強大也更靈活。安裝完成後，即可在事件檢視器 (Event Viewer) 看到 Sysmon 日誌，位於 `Application & Services -> Microsoft -> Windows -> Sysmon -> Operational`。
+
+![image](https://hackmd.io/_uploads/HJlbgd9xGl.png)
+Sysmon Event ID 1 可以歸納一些重要欄位成組為：
+    
+- Process info: 執行的行程的內容，包括它的 PID (Process ID)，路徑 (image)，和命令列。
+- Parent Info: 父行程的內容，有助於建構行程樹或攻擊鏈。
+- Binary Info: 行程雜湊值，數位簽章，PE (Windows 系統上的執行檔格式，如 `.exe`，`.dll`，`.sys`) 元資料。
+- User Context: 執行行程的使用者，與最重要的 Logon ID。
+
+> 幾乎所有攻擊都發生在端點上，而且需要啟動至少幾個行程才能攻破系統或從系統外洩資料，因此 process monitoring 是 SOC 團隊最重要的日誌來源。
+
+基礎分析行程啟動 (Process Launch)：
+1. 打開 Sysmon 日誌，篩選事件碼為 1 的事件。
+
+2. 查看 process info 與 binary info 組的各欄位，危險訊號是：
+    
+    - image 位於不常見的目錄。
+    - 行程的名稱很可疑。
+    - 行程雜湊值與 [VirusTotal](https://www.virustotal.com/gui/home/search) 上惡意軟體的雜湊值相同。
+        
+3. 查看 parent info 組的欄位，危險訊號是：
+    
+    - 父行程匹配步驟 2 的危險訊號 (可疑名稱、路徑、雜湊值)。
+    
+4. 若仍有疑惑，進一步深入分析：
+    
+    - 找到前面 ProcessId 與 ParentProcessId 一樣的事件。
+    - 按照步驟 2 與 3 進行分析。
+    
+5. 最後透過篩選所有安全日誌事件與 Sysmon 日誌事件 Logon ID 一樣的事件來追蹤攻擊鏈。
+
+練習：
+1. 打開 VM 桌面上的 `Practice-Sysmon.evtx` 檔案，Sarah 使用哪個瀏覽器來瀏覽網頁？
+
+    ![image](https://hackmd.io/_uploads/BkoUxocefx.png)
+    
+    A：`Google Chrome`
+    
+2. Sarah 從瀏覽器下載了哪個檔案？
+
+    
+
+3. 該檔案是從哪個網址上下載的？
