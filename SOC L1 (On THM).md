@@ -2570,3 +2570,59 @@ Sysmon Event ID 1 可以歸納一些重要欄位成組為：
 > `Contents`: 資料流的內容。裡面會註明資訊，如 `ZoneId=3` 代表來自網路，`ReferrerUrl` 表明前導網址，`HostUrl` 表明實際下載惡意檔案的網址。
 
 ---
+
+#### Sysmon: Files and Network
+
+Sysmon 不僅可以記錄行程建立的事件，還會紀錄檔案與註冊表的變更、網路連接、DNS 查詢等。與默認日誌不同，Sysmon 可以自定義要記錄和忽略的內容。
+
+| Event ID | 說明                    | 安全日誌中對應的替代項                                   | 目的                                                                                 |
+|:--------:|:----------------------- |:-------------------------------------------------------- |:------------------------------------------------------------------------------------ |
+| 11 / 13  | 檔案建立 / 註冊表值設定 | 4656 用於檔案變更，4657 用於註冊表變更，兩者皆預設停用。 | 偵測惡意軟體釋放的檔案，或惡意軟體對註冊表所做的變更。(例如：為了實現持續性攻擊控制) |
+|  3 / 22  | 網路連接 / DNS 查詢     | 沒有對應，需要額外的防火牆與 DNS 設置。                  | 偵測來自不可信行程的流量，或通往已知惡意目的地的流量。                               |
+
+這些事件的結構：
+![image](https://hackmd.io/_uploads/BJlwLfpgze.png)
+
+雖然每個 ID 有不同用途，但橘色區塊是一樣的架構。而 Logon ID 與父行程資訊等重要資訊沒有標示，是因為可以利用 ProcessId 欄位找到對應的 Event ID 1，進而知道完整的資訊。
+
+分析行程活動 (Process Activities)：
+1. 複製 event ID 1 中的 ProcessId。
+2. 尋找其他具有相同 ProcessId 的 Sysmon 事件。
+3. 網路連接的危險訊號：
+
+    - 連接上內部 IPs 的 port 80，或非標準端口如 4444。
+    - 連接上已知的惡意 IPs。
+    - 對可疑網域的 DNS 查詢。
+
+4. 檔案或註冊表變更的危險訊號：
+
+    - 檔案被釋放到臨時目錄如 `C:\Temp` 或 `C:\Users\Public`
+    - 釋放的檔案是一個腳本 (`.bat`、`.psl`) 或可執行檔案 (`.exe`、`.com`)。
+    - 建立的檔案或註冊表的鍵被用於維持永久性 (persistence)。
+
+練習：
+1. 下載的惡意軟體建立了哪個檔案，以維持在主機上？
+
+    篩選 event ID 1 的事件，找到 Sarah 下載的惡意檔案事件，找到 ProcessId：
+    ![image](https://hackmd.io/_uploads/HyX1j4TlGl.png)
+    
+    篩選 event ID 11 的事件，找到 ProcessId 一樣為 1460 的事件：
+    ![image](https://hackmd.io/_uploads/HJLfhE6efg.png)
+
+    A：`C:\Users\sarah.miller\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\DeleteApp.url`
+
+2. 我
+
+    
+    
+3. 我
+
+    
+    
+---
+
+#### PowerShell: Logging Commands
+
+---
+
+###
