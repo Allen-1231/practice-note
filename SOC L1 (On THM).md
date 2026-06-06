@@ -2666,8 +2666,19 @@ C:\Users\<USER>\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleH
     
 3. 找到儲存在 PowerShell 歷史中的 flag。
 
+    每個使用者帳號 user 都會分別有不同的 PowerShell history，剛剛的是 Administrator 的：
+    ![image](https://hackmd.io/_uploads/S1mGnXZWfe.png)
+
+    查找其他 user，分別查看歷史檔案裡有無 flag：
+    ![image](https://hackmd.io/_uploads/S1cSh7Z-Mg.png)
     
+    ![image](https://hackmd.io/_uploads/S1_32XW-fx.png)
+    
+    最後在 `thm.bob` 這個使用者的 PowerShell 歷史檔中找到：
+    ![image](https://hackmd.io/_uploads/SJF0h7Wbzl.png)
+    
+    A：`THM{it_was_me!}`
     
 ---
 
-###
+### Windows Threat Detection
