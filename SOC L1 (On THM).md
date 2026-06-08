@@ -2682,3 +2682,34 @@ C:\Users\<USER>\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleH
 ---
 
 ### Windows Threat Detection
+
+#### Initial Access
+
+攻擊者的第一步是通過主入口，無論是透過暴力破解、針對性破解，一旦攻擊者成功進入，就稱為初始存取。
+
+分為兩類，需要暴露服務的，與依賴人類互動的。
+
+- Exposed Services
+    
+    在網際網路直接部署 Windows 伺服器是 IT 部門常見的操作。公司網站需要開放的 HTTP port 來顯示網頁內容、郵件伺服器若沒有啟用 SMTP port 就無法處理電子郵件、IT 管理員需要 RDP 去遠端管理電腦。然而每個公開的服務都有安全風險，這些暴露的系統會自動化工具掃描，尋找開放的 port、弱的密碼、或會修補的漏洞。
+    
+    MITRE 技術中：
+    - T1133 / External Remote Services: 攻擊者會尋找密碼弱且開放的 RDP/VNC/SSH 去取得對機器的遠端存取。
+    
+    - T1190 / Exploit Public-Facing Application: 攻擊者會尋找配置錯誤或存在漏洞的網站與應用程式。
+    
+- User-Driven Methods
+
+    ![image](https://hackmd.io/_uploads/rktojiXWMx.png)
+    
+    人們常常在無意中幫助了攻擊者，例如點擊惡意連結、執行釣魚郵件的附件、使用盜版軟體、插入不明的 USB 等。
+    
+    MITRE 技術中：
+    - T1566 / Phishing: 攻擊者採用不同的釣魚技術，誘使使用者自己執行惡意軟體。
+    
+    - T1091 / Removable Media: 攻擊者感染一個 USB 並期望使用者會在多個電腦上使用該 USB。
+
+---
+
+#### Initial Access via RDP
+
