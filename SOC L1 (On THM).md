@@ -2713,3 +2713,33 @@ C:\Users\<USER>\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleH
 
 #### Initial Access via RDP
 
+在該房間的 VM 中，IT 管理員暴露了生產伺服器上的遠端桌面協定 (RDP)，以便週末在家進行遠端存取。憑證為 Administrator:Summer2025。試著了解接下來會發生什麼事與使用 Event Viewer 中的 logs 來檢測 (VM 中 `C:\Users\Administrator\Desktop\Practice\RDP Case\RDP-Security.evtx` 檔案)。
+
+| Step of Attack                                                                          | 偵測機會                                                                                                                                                                                         |
+|:--------------------------------------------------------------------------------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Network Scan: 殭屍網路掃描內部 IP 並偵測到暴露的 RDP port                               | 超出該房間的教學範圍。                                                                                                                                                                           |
+| RDP Brute Force: 殭屍網路開始暴力破解常見的使用者名稱如 Administrator、admin、support。 | 1. 打開安全日誌並篩選登入失敗的事件 (Event ID 4625)。2. 篩選 logon type 3 和 10，代表遠端登入。3. 篩選來自外部 IP 的登入事件 (使用 Source IP 欄位)。                                             |
+| Initial Access via RDP: 諸多嘗試後，殭屍網路猜中了密碼並進入到系統中。                  | 1. 一樣安全日誌，篩選 Event ID 4624 登入成功的事件。2. 檢查該次成功登入所使用的帳號，該帳號就是用來初始存取的帳號。                                                                              |
+| Further Malicious Action: 入侵的兩小時後，攻擊者藉由 RDP 登入並查看了桌面。             | 1. 一樣安全日誌，篩選 logon type 10，代表互動式 RDP 登入。2. 複製該登入事件中的 Logon ID 欄位。3. 打開 Sysmon 日誌，搜尋具有相同 Logon ID 的事件。4. 如此便會看到所有攻擊者藉由 RDP 執行的行程。 |
+
+Logging Brute Force：
+將 RDP 暴露在公共網路的代價就是會在極短時間內引來全球殭屍網路的暴力破解，並生成數百次 4625 類型的事件。
+![image](https://hackmd.io/_uploads/BJ2LnXSbMx.png)
+
+練習：
+1. 哪一個使用者看起來最容易受到殭屍網路攻擊？
+
+    篩選 Event ID 4625 的事件：
+    ![image](https://hackmd.io/_uploads/S1Rsb4r-Mx.png)
+    
+    大多數登入失敗的事件 TargetUserName 皆為 ADMINISTRATOR：
+    ![image](https://hackmd.io/_uploads/rJ0WI4Sbfg.png)
+    
+    A：`ADMINISTRATOR`
+
+2. 哪個 IP 地址成功藉由 RDP (Logon Type 10) 侵入主機？
+
+
+
+3. 攻擊者的真實工作站名稱 (hostname)？
+
