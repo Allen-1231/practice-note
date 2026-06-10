@@ -2727,7 +2727,7 @@ Logging Brute Force：
 ![image](https://hackmd.io/_uploads/BJ2LnXSbMx.png)
 
 練習：
-1. 哪一個使用者看起來最容易受到殭屍網路攻擊？
+1. 哪一個使用者看起來最像是受到殭屍網路攻擊？
 
     篩選 Event ID 4625 的事件：
     ![image](https://hackmd.io/_uploads/S1Rsb4r-Mx.png)
@@ -2739,7 +2739,15 @@ Logging Brute Force：
 
 2. 哪個 IP 地址成功藉由 RDP (Logon Type 10) 侵入主機？
 
+    侵入主機代表成功登入了，因此篩選 Event ID 4624：
+    ![image](https://hackmd.io/_uploads/H1svEIUZGl.png)
+    
+    並切換到 XML 標籤頁，勾選下方的手動編輯查詢，新增 `and *[EventData[Data[@Name='LogonType']='3' or Data[@Name='LogonType']='10']]`，使得查詢 Event ID 4624 的事件中 Logon ID 10 (遠端登入) 的事件：
+    ![image](https://hackmd.io/_uploads/Syum8IUWGg.png)
 
+    ![image](https://hackmd.io/_uploads/H15PI8LWMx.png)
+
+    A：`203.205.34.107`
 
 3. 攻擊者的真實工作站名稱 (hostname)？
 
