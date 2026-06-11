@@ -2751,3 +2751,11 @@ Logging Brute Force：
 
 3. 攻擊者的真實工作站名稱 (hostname)？
 
+    調查真實工作站名稱 --> Event ID 4624 且 Logon Type 3 的事件。
+    
+    因為在暴力破解 (多個 4625) 或 RDP 登入 (Logon Type 10) 時，Windows 記錄到的工作站名稱很容易是假的，只有 Logon Type 3 (網路登入) 成功時，才會強制留下最真實的網路特徵。
+    ![image](https://hackmd.io/_uploads/HJYtsqD-zx.png)
+
+    ![image](https://hackmd.io/_uploads/SkzGn5wZzx.png)
+    
+    A：`DESKTOP-QNBC4UU`
