@@ -2759,3 +2759,47 @@ Logging Brute Force：
     ![image](https://hackmd.io/_uploads/SkzGn5wZzx.png)
     
     A：`DESKTOP-QNBC4UU`
+
+---
+    
+#### Initial Access via Phishing
+
+自 2022 年 ChatGPT 發佈以來，釣魚攻擊的數量大幅增加，成功率也很高，使用者相當容易受到攻擊。在此著重在兩種導致 Windows 入侵的釣魚技術：
+- Binary Attachments
+    
+    常見的二進位附件：
+    - 可執行檔 (Executables)：`.exe`、`.dll`、`.bat`、`.sh`、`.bin`
+    - 壓縮檔 (Archives)：`.zip`、`.rar`、`.7z`、`.tar.gz`
+    - 文件 (Documents)：`.docx`、`.xlsx`、`.pdf`、`.pptx` (它們看起來像文字，但底層是壓縮過的二進位結構)
+    - 多媒體檔案 (Media)：`.png`、`.jpg`、`.mp3`、`.mp4`
+    
+    Windows 系統中有許多可執行檔的副檔名，大多數使用者都知道不該開啟 `.exe` 的檔案，然而有些 `.com`、`.scr`、`.cpl` 檔可能也包含著惡意軟體。尤其 Windows 默認會隱藏副檔名，因此若攻擊者將病毒檔案命名為像 `invoice.pdf.exe` 或 `cat.png.com`，並修改圖示以符合發票、貓，就會使使用者更沒有防備心而去點擊。
+    
+    ![image](https://hackmd.io/_uploads/rkzbnMt-fx.png)
+    > 破綻：Type 顯示為應用程式，而不是 pdf 檔。
+    
+    ![image](https://hackmd.io/_uploads/S1lRhGY-zg.png)
+    > 破綻：在 Windows 中，`.com` 是一個最高權限的二進位執行檔 (MS-DOS Application)。
+    
+- LNK Attachments
+
+    為了躲避防毒軟體的偵測，攻擊者可能會傾向用 PowerShell、VBS 或 BAT 腳本等，並將這些腳本隱藏在 LNK 捷徑檔案的背後。這些用來藏惡意指令的檔案，與在桌面上那些點擊的程式捷徑是一樣的檔案格式 (`.lnk`)。
+    
+    ![image](https://hackmd.io/_uploads/BJOOZ7tZfe.png)
+    
+    上方圖片範例下載並執行了 RemcosRAT 的簡化版本，這種惡意軟體被廣泛用於針對大型公司和政府機構的攻擊。完整 LNK payload：
+    ![image](https://hackmd.io/_uploads/Bkz747KZGg.png)
+    
+    在捷徑檔案 **按右鍵 -> 內容 -> 捷徑** 的部分可以看到 **目標** 欄位，攻擊者可以包含任何指令在此區塊。
+    ![image](https://hackmd.io/_uploads/ryKiQ7YZMx.png)
+    
+練習：
+1. 扮演一個無受訓的使用者，無警戒地打開 COM 檔案：執行 **Phishing Case 1** 資料夾中的 `www.skype.com` 檔案，得到什麼 flag？
+
+    ![image](https://hackmd.io/_uploads/S1DlImK-zx.png)
+    
+    ![image](https://hackmd.io/_uploads/Bk1MIXY-Gl.png)
+    
+    A：`THM{misleading_extension}`
+
+2. 我
