@@ -2824,3 +2824,18 @@ Logging Brute Force：
 
 #### Contiuning Phishing Topic
 
+- Detecting Malicious Downloads
+
+    使用者用瀏覽器或桌面應用程式打開釣魚附件，這可能會直接下載 `.exe` 檔的惡意軟體，而更常見的狀況是會看到一個包含惡意軟體的壓縮檔像 `.rar`、`.zip`，這樣的情況下 Sysmon 可以大幅幫助檢測每個攻擊階段：
+    ![image](https://hackmd.io/_uploads/r1gp3hjZfg.png)
+    
+    ![image](https://hackmd.io/_uploads/ryZ1T2jZze.png)
+    
+- Notes on LNK Attachments
+
+    與二進位檔案不同，LNK 檔案會在執行過程中留下很少痕跡。如下圖範例所示，使用者下載了像是 Google Chrome 捷徑的 LNK 檔，實際上是執行 PowerShell payload。
+    
+    在使用者啟動捷徑後，Windows Explorer 會讀取 LNK 的 **Target** 欄位，並使其看起來像是 explorer.exe 直接啟動 PowerShell，然而我們可以透過查看之前的檔案建立事件 (file creation events) 來判斷它的確是 LNK 釣魚攻擊或其它種攻擊 - LNK 檔案先前必定曾存在於下載 (Downloads) 路徑中：
+    ![image](https://hackmd.io/_uploads/r1FNAnobze.png)
+    
+練習：
